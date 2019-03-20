@@ -1,27 +1,32 @@
 package cn.yxisme.core.web;
 
+import cn.yxisme.core.common.ResultBean;
 import cn.yxisme.core.exception.CodeMessageDef;
 import cn.yxisme.core.exception.MyException;
 import cn.yxisme.entity.User;
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by yangxiong on 2019/3/5.
  */
 public class GlobalHandler {
 
-    public final static String SESSION_USER = "user";
+    private static Logger logger = LoggerFactory.getLogger(GlobalHandler.class);
+
+    final static String SESSION_USER = "user";
 
     private HttpSession getSession() {
         HttpServletRequest request = ((ServletRequestAttributes)
-                RequestContextHolder.getRequestAttributes()).getRequest();
+                Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         return request.getSession();
     }
 
@@ -29,7 +34,8 @@ public class GlobalHandler {
      * 登入
      * @param user
      */
-    public void sessionLogin(User user) {
+    protected void sessionLogin(User user) {
+        logger.info("用户登录：【{}】", JSONObject.toJSONString(user));
         HttpSession session = getSession();
         session.setAttribute(SESSION_USER, user);
     }
@@ -37,8 +43,14 @@ public class GlobalHandler {
     /**
      * 登出
      */
-    public void sessionLogout() {
+    protected void sessionLogout() {
         HttpSession session = getSession();
+        Object user = session.getAttribute(SESSION_USER);
+        if (user == null) {
+            return;
+        }
+
+        logger.info("用户登出：【{}】", JSONObject.toJSONString(user));
         session.removeAttribute(SESSION_USER);
     }
 
@@ -49,7 +61,7 @@ public class GlobalHandler {
      */
     public User getUser() throws MyException {
         HttpServletRequest request = ((ServletRequestAttributes)
-                RequestContextHolder.getRequestAttributes()).getRequest();
+                Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SESSION_USER);
 
@@ -77,20 +89,13 @@ public class GlobalHandler {
     @ExceptionHandler({Exception.class})
     @ResponseBody
     protected Object ExceptionHandler(Exception ex) {
+        logger.error("", ex);
         ex.printStackTrace();
 
-        Map map = new HashMap();
         if (ex instanceof MyException) {
-            MyException me = (MyException) ex;
-            map.put("code", me.getCode());
-            map.put("msg", me.getMsg());
-            map.put("data", null);
-        } else {
-            map.put("code", CodeMessageDef.SYSTEM_ERROR.getCode());
-            map.put("msg", CodeMessageDef.SYSTEM_ERROR.getMsg());
-            map.put("data", null);
+            return new ResultBean((MyException) ex);
         }
 
-        return map;
+        return ResultBean.systemError();
     }
 }

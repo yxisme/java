@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * Created by yangxiong on 2019/3/11.
  */
-@CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/file")
 public class FileController extends GlobalHandler {

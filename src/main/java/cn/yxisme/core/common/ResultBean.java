@@ -2,6 +2,7 @@ package cn.yxisme.core.common;
 
 import cn.yxisme.core.exception.CodeMessage;
 import cn.yxisme.core.exception.CodeMessageDef;
+import cn.yxisme.core.exception.MyException;
 
 /**
  * Created by yangxiong on 2019/3/2.
@@ -22,6 +23,19 @@ public class ResultBean {
         this.code = cm.getCode();
         this.message = cm.getMsg();
         this.data = data;
+    }
+
+    public ResultBean(MyException me) {
+        this.code = me.getCode();
+        this.message = me.getMsg();
+    }
+
+    public static ResultBean systemError() {
+        CodeMessage cm = CodeMessageDef.SYSTEM_ERROR;
+        ResultBean resultBean = new ResultBean();
+        resultBean.setCode(cm.getCode());
+        resultBean.setMessage(cm.getMsg());
+        return resultBean;
     }
 
     public int getCode() {
