@@ -25,7 +25,7 @@ public class LoginController extends GlobalHandler {
      * @return
      * @throws MyException
      */
-    @RequestMapping(value = "/loginVerify",method = RequestMethod.POST)
+    @RequestMapping(value = "/",method = RequestMethod.POST)
     public Object loginVerify(@RequestBody User user) throws MyException {
         User userInDB = loginService.login(user);
         sessionLogin(userInDB);
@@ -46,7 +46,7 @@ public class LoginController extends GlobalHandler {
      * 获取当前登录的用户
      * @return
      */
-    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    @GetMapping(value = "/getUser")
     public Object getSessionUser() throws MyException {
         User user = userService.get(getUserId());
         return new ResultBean(user);

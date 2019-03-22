@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService {
             throw new MyException(CodeMessageDef.PARAMETER_ERROR);
         }
 
-        User userInDB = userMapper.selectByPrimaryKey(user.getId());
+        User userInDB = userMapper.selectByUserName(user.getUsername());
         if (userInDB == null) {
             throw new MyException(CodeMessageDef.USER_NAME_ERROR);
         }

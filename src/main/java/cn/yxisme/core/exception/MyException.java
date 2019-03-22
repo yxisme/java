@@ -4,7 +4,9 @@ package cn.yxisme.core.exception;
  * Created by yangxiong on 2019/3/5.
  */
 public class MyException extends Exception {
-    private static final long serialVersionUID = 3162989605548935190L;
+
+    private int code;
+    private String msg;
 
     public MyException(int code, String msg) {
         this.code = code;
@@ -15,9 +17,6 @@ public class MyException extends Exception {
         this.code = codeMessage.getCode();
         this.msg = codeMessage.getMsg();
     }
-
-    private int code;
-    private String msg;
 
     public int getCode() {
         return code;
