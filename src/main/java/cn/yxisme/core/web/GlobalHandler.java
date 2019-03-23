@@ -7,6 +7,7 @@ import cn.yxisme.entity.User;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -94,6 +95,10 @@ public class GlobalHandler {
 
         if (ex instanceof MyException) {
             return new ResultBean((MyException) ex);
+        }
+
+        if (ex instanceof MethodArgumentNotValidException) {
+            return ResultBean.validError();
         }
 
         return ResultBean.systemError();

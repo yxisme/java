@@ -38,6 +38,14 @@ public class ResultBean {
         return resultBean;
     }
 
+    public static ResultBean validError() {
+        CodeMessage cm = CodeMessageDef.PARAMETER_ERROR;
+        ResultBean resultBean = new ResultBean();
+        resultBean.setCode(cm.getCode());
+        resultBean.setMessage(cm.getMsg());
+        return resultBean;
+    }
+
     public int getCode() {
         return code;
     }

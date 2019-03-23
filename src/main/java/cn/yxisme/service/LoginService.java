@@ -4,5 +4,5 @@ import cn.yxisme.core.exception.MyException;
 import cn.yxisme.entity.User;
 
 public interface LoginService {
-    User login(User user) throws MyException;
+    User checkLogin(String username, String password) throws MyException;
 }

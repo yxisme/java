@@ -16,20 +16,14 @@ public class LoginServiceImpl implements LoginService {
     UserMapper userMapper;
 
     @Override
-    public User login(User user) throws MyException {
-        if (user == null || StringUtils.isEmpty(user.getUsername())
-                || StringUtils.isEmpty(user.getPassword())) {
-            throw new MyException(CodeMessageDef.PARAMETER_ERROR);
-        }
-
-        User userInDB = userMapper.selectByUserName(user.getUsername());
+    public User checkLogin(String username, String password) throws MyException {
+        User userInDB = userMapper.selectByUserName(username);
         if (userInDB == null) {
             throw new MyException(CodeMessageDef.USER_NAME_ERROR);
         }
 
-
         if (StringUtils.isEmpty(userInDB.getPassword())
-                || !userInDB.getPassword().equals(user.getPassword())) {
+                || !userInDB.getPassword().equals(password)) {
             throw new MyException(CodeMessageDef.USER_PASSWORD_ERROR);
         }
 

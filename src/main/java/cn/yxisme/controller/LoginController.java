@@ -1,12 +1,13 @@
 package cn.yxisme.controller;
 
+import cn.yxisme.context.Context;
+import cn.yxisme.controller.bean.user.UserBean;
 import cn.yxisme.core.common.ResultBean;
 import cn.yxisme.core.exception.MyException;
 import cn.yxisme.core.web.GlobalHandler;
 import cn.yxisme.entity.User;
-import cn.yxisme.service.LoginService;
-import cn.yxisme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,29 +15,25 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController extends GlobalHandler {
 
     @Autowired
-    LoginService loginService;
-
-    @Autowired
-    UserService userService;
+    Context context;
 
     /**
-     * 登录
-     * @param user
-     * @return
+     * @param bean
+     * @return ResultBean
      * @throws MyException
      */
-    @RequestMapping(value = "/",method = RequestMethod.POST)
-    public Object loginVerify(@RequestBody User user) throws MyException {
-        User userInDB = loginService.login(user);
+    @PostMapping(value = "")
+    public Object login(@RequestBody @Validated({UserBean.LoginValid.class}) UserBean bean) throws MyException {
+        User userInDB = context.loginService.checkLogin(bean.getUsername(), bean.getPassword());
         sessionLogin(userInDB);
         return new ResultBean();
     }
 
     /**
      * 登出
-     * @return
+     * @return ResultBean
      */
-    @RequestMapping(value = "/logout",method = RequestMethod.POST)
+    @PostMapping(value = "/logout")
     public Object logout() {
         sessionLogout();
         return new ResultBean();
@@ -44,11 +41,11 @@ public class LoginController extends GlobalHandler {
 
     /**
      * 获取当前登录的用户
-     * @return
+     * @return ResultBean
      */
     @GetMapping(value = "/getUser")
     public Object getSessionUser() throws MyException {
-        User user = userService.get(getUserId());
+        User user = context.userService.get(getUserId());
         return new ResultBean(user);
     }
 }
