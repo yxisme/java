@@ -7,3 +7,5 @@ SpringBoot版本: 2.1.2
 统一JSON返回格式
 
 全局异常处理
+
+使用Java Bean Validation做参数校验
