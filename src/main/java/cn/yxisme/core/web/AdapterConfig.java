@@ -4,6 +4,7 @@ import cn.yxisme.core.upload.UploadFileConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.config.annotation.*;
 
 /**
@@ -15,6 +16,11 @@ public class AdapterConfig implements WebMvcConfigurer {
     @Bean
     LoginInterceptor loginInterceptor() {
         return new LoginInterceptor();
+    }
+
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+        return new MethodValidationPostProcessor();
     }
 
     @Autowired

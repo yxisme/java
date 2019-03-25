@@ -3,6 +3,8 @@ package cn.yxisme.core.common;
 import cn.yxisme.core.exception.CodeMessage;
 import cn.yxisme.core.exception.CodeMessageDef;
 import cn.yxisme.core.exception.MyException;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 /**
  * Created by yangxiong on 2019/3/2.
@@ -38,11 +40,13 @@ public class ResultBean {
         return resultBean;
     }
 
-    public static ResultBean validError() {
+    public static ResultBean validError(String message) {
         CodeMessage cm = CodeMessageDef.PARAMETER_ERROR;
+
         ResultBean resultBean = new ResultBean();
         resultBean.setCode(cm.getCode());
-        resultBean.setMessage(cm.getMsg());
+
+        resultBean.setMessage(StringUtils.isEmpty(message) ? cm.getMsg() : message);
         return resultBean;
     }
 

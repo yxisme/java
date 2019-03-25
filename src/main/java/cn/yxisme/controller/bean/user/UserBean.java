@@ -11,9 +11,9 @@ public class UserBean {
 
     @NotNull(groups = EditValid.class)
     private Integer id;
-    @NotBlank(groups = {LoginValid.class, EditValid.class, AddValid.class})
+    @NotBlank(groups = {LoginValid.class, EditValid.class, AddValid.class}, message = "用户名不能为空")
     private String username;
-    @NotBlank(groups = {LoginValid.class, EditValid.class, AddValid.class})
+    @NotBlank(groups = {LoginValid.class, EditValid.class, AddValid.class}, message = "密码不能为空")
     private String password;
 
     // 分组校验

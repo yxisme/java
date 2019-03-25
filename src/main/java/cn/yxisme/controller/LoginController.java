@@ -9,7 +9,9 @@ import cn.yxisme.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.constraints.NotNull;
 
+@Validated
 @RestController
 @RequestMapping("/login")
 public class LoginController extends GlobalHandler {
@@ -46,6 +48,12 @@ public class LoginController extends GlobalHandler {
     @GetMapping(value = "/getUser")
     public Object getSessionUser() throws MyException {
         User user = context.userService.get(getUserId());
+        return new ResultBean(user);
+    }
+
+    @GetMapping(value = "/test")
+    public Object test(@RequestParam @NotNull(message = "ID不能为空") Integer id) throws MyException {
+        User user = context.userService.get(id);
         return new ResultBean(user);
     }
 }
